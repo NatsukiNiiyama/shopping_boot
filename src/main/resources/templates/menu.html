@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>メニュー</title>
+</head>
+<body>
+	<h2>メニュー画面</h2>
+
+	<div>
+		ようこそ、
+		<th:block th:text="${loginForm.userId}" />
+		さん
+	</div>
+	<br>
+	<div>
+		<a href="<c:url value='/list' />">商品一覧</a>
+	</div>
+	<div>
+		<a href="<c:url value='/login' />">購入履歴</a>
+	</div>
+	<br>
+	<div>
+		<a href="<c:url value='/login' />">ログアウト</a>
+	</div>
+</body>
+</html>

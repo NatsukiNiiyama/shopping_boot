@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ログイン</title>
+</head>
+<body>
+	<h2>ログイン画面</h2>
+
+	<form th:object="${loginForm}" th:action="@{/shoping/menu}">
+		<div>ユーザIDを入力してください。</div>
+		<div>
+			<input type="text" name="userId" />
+			<!--/* <form:errors path="userId" /> */-->
+		</div>
+		<div>パスワードを入力してください。</div>
+		<div>
+			<input type="password" name="password" />
+			<!--/* <form:errors path="password" /> */-->
+		</div>
+		<div>
+			<input type="submit" th:value="送信" />
+		</div>
+	</form>
+</body>
+</html>
