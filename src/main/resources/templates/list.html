@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>商品一覧</title>
@@ -7,34 +8,33 @@
 <body>
 	<h2>商品一覧画面</h2>
 
-	<c:forEach var="item" items="${itemList}">
-		<%-- <form:form modelAttribute="detailForm" action="${'/shoping/detail/' += item.id}">--%>
-		<form modelAttribute="detailForm" action="/shoping/detail">
-		<input type="hidden" name="itemId" value="${item.id}" />
+	<th:block th:each="item : ${itemList}">
+		<form th:object="${detailFom}" th:action="@{detail}" method="post">
+			<input type="hidden" name="itemId" th:value="${item.id}" />
 			<table>
 				<tr>
-					<th rowspan="2"><img src="${item.imageUrl}"
-						title="${item.name}" height=100 /></th>
-					<td colspan="2"><c:out value="${item.name}" /></td>
+					<th rowspan="2"><img th:src="${item.imageUrl}"
+						th:title="${item.name}" height=100 /></th>
+					<td colspan="2"><span th:text="${item.name}">name</span></td>
 				</tr>
 				<tr>
-					<td><c:out value="${item.price}" />円</td>
-					<td><button>詳細</button></td>
+					<td><span th:text="${item.price}">price</span>円</td>
+					<td><input type="submit" th:value="詳細" /></td>
 				</tr>
 			</table>
 		</form>
-	</c:forEach>
+	</th:block>
 
 	<br>
 	<div>
-		<a href="<c:url value='/backmenu' />">メニュー</a>
+		<a th:href="@{backmenu}">メニュー</a>
 	</div>
 	<div>
-		<a href="<c:url value='/menu' />">購入履歴</a>
+		<a th:href="@{menu}">購入履歴</a>
 	</div>
 	<br>
 	<div>
-		<a href="<c:url value='/login' />">ログアウト</a>
+		<a th:href="@{login}">ログアウト</a>
 	</div>
 </body>
 </html>

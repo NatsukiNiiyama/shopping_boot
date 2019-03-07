@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>購入確認</title>
@@ -7,37 +8,37 @@
 <body>
 	<h2>購入確認画面</h2>
 
-	<form:form modelAttribute="purchaseForm" action="/shoping/menu">
+	<form th:object="${purchaseForm}" th:action="@{confirm}" method="post">
+		<input type="hidden" name="itemId" th:value="${dispItem.id}" />
 		<table>
-			<form:input type="hidden" path="itemId" value="${dispItem.id}" />
 			<tr>
-				<th colspan="2"><img src="${dispItem.imageUrl}"
-					title="${dispItem.name}" height=300 /></th>
+				<th colspan="2"><img th:src="${dispItem.imageUrl}"
+					th:title="${dispItem.name}" height=300 /></th>
 			</tr>
 			<tr>
-				<td><c:out value="${dispItem.name}" /></td>
-				<td><c:out value="${dispItem.price}" />円</td>
+				<td><span th:text="${dispItem.name}">name</span></td>
+				<td><span th:text="${dispItem.price}">price</span>円</td>
 			</tr>
 			<tr>
-				<td><form:input path="count" size="1" />個</td>
-				<td><form:button>購入</form:button></td>
+				<td><input name="count" size="1" />個</td>
+				<td><input type="submit" th:value="購入" /></td>
 			</tr>
 		</table>
-	</form:form>
+	</form>
 
 	<br>
 	<div>
-		<a href="<c:url value='/backmenu' />">メニュー</a>
+		<a th:href="@{backmenu}">メニュー</a>
 	</div>
 	<div>
-		<a href="<c:url value='/list' />">商品一覧</a>
+		<a th:href="@{list}">商品一覧</a>
 	</div>
 	<div>
-		<a href="<c:url value='/menu' />">購入履歴</a>
+		<a th:href="@{menu}">購入履歴</a>
 	</div>
 	<br>
 	<div>
-		<a href="<c:url value='/login' />">ログアウト</a>
+		<a th:href="@{login}">ログアウト</a>
 	</div>
 </body>
 </html>

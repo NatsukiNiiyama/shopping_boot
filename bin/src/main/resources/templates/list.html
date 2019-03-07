@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品一覧</title>
+</head>
+<body>
+	<h2>商品一覧画面</h2>
+
+	<c:forEach var="item" items="${itemList}">
+		<%-- <form:form modelAttribute="detailForm" action="${'/shoping/detail/' += item.id}">--%>
+		<form modelAttribute="detailForm" action="/shoping/detail">
+		<input type="hidden" name="itemId" value="${item.id}" />
+			<table>
+				<tr>
+					<th rowspan="2"><img src="${item.imageUrl}"
+						title="${item.name}" height=100 /></th>
+					<td colspan="2"><c:out value="${item.name}" /></td>
+				</tr>
+				<tr>
+					<td><c:out value="${item.price}" />円</td>
+					<td><button>詳細</button></td>
+				</tr>
+			</table>
+		</form>
+	</c:forEach>
+
+	<br>
+	<div>
+		<a href="<c:url value='/backmenu' />">メニュー</a>
+	</div>
+	<div>
+		<a href="<c:url value='/menu' />">購入履歴</a>
+	</div>
+	<br>
+	<div>
+		<a href="<c:url value='/login' />">ログアウト</a>
+	</div>
+</body>
+</html>

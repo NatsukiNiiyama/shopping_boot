@@ -79,9 +79,9 @@ public class ShoppingController {
 
 	private List<ItemEntity> getItemList() {
 		List<ItemEntity> list = new ArrayList<>();
-		list.add(new ItemEntity(1, "参考書", "../static/images/book_law_roppouzensyo.png", 1000));
-		list.add(new ItemEntity(2, "CD", "../static/images/entertainment_music.png", 2000));
-		list.add(new ItemEntity(3, "Tシャツ", "../static/images/fashion_sutajan.png", 3000));
+		list.add(new ItemEntity(1, "参考書", "images/book_law_roppouzensyo.png", 1000));
+		list.add(new ItemEntity(2, "CD", "images/entertainment_music.png", 2000));
+		list.add(new ItemEntity(3, "Tシャツ", "images/fashion_sutajan.png", 3000));
 		return list;
 	}
 

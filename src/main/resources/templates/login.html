@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>ログイン</title>
@@ -7,16 +8,17 @@
 <body>
 	<h2>ログイン画面</h2>
 
-	<form th:object="${loginForm}" th:action="@{/shoping/menu}">
+	<form th:object="${loginForm}" th:action="@{menu}" method="post">
 		<div>ユーザIDを入力してください。</div>
 		<div>
-			<input type="text" name="userId" />
-			<!--/* <form:errors path="userId" /> */-->
+			<input type="text" th:field="*{userId}" />
+			<!-- error文が出ない  -->
+			<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">userIdError</span>
 		</div>
 		<div>パスワードを入力してください。</div>
 		<div>
-			<input type="password" name="password" />
-			<!--/* <form:errors path="password" /> */-->
+			<input type="password" th:field="*{password}" />
+			<span th:if="${#fields.hasErrors('password')}" th:errors="password">passwordError</span>
 		</div>
 		<div>
 			<input type="submit" th:value="送信" />
