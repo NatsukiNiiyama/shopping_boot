@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -14,14 +14,24 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.dba.ItemDBAccessJDBC;
+import com.example.demo.dba.LoginUserDBAccessJDBC;
+import com.example.demo.entity.ItemEntity;
+import com.example.demo.entity.LoginUserEntity;
+import com.example.demo.form.DetailForm;
+import com.example.demo.form.LoginForm;
+import com.example.demo.form.PurchaseForm;
+
 @Controller
 public class ShoppingController {
 
 	@RequestMapping(value = { "/", "/login" }, method = { GET, POST })
 	public String login(Model model) {
 
+		LoginUserDBAccessJDBC dba = new LoginUserDBAccessJDBC();
+		List<LoginUserEntity> list = dba.findAll();
+		
 		LoginForm form = new LoginForm();
-
 		model.addAttribute(form);
 
 		return "login";
@@ -30,7 +40,8 @@ public class ShoppingController {
 	@RequestMapping(value = "/menu", method = { GET, POST })
 	public String toMenu(@Valid LoginForm form, BindingResult result) {
 
-		if (result.hasErrors()) {
+		LoginUserDBAccessJDBC dba = new LoginUserDBAccessJDBC();
+		if (result.hasErrors() || dba.findOne(form.getUserId()) == null) {
 			return "login";
 		}
 
@@ -45,8 +56,9 @@ public class ShoppingController {
 	@RequestMapping(value = "/list", method = { GET, POST })
 	public String toList(HttpServletRequest request, Model model) {
 
-		List<ItemEntity> list = getItemList();
-		request.setAttribute("itemList", list);
+		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
+		request.setAttribute("itemList", dba.findAll());
+		//request.setAttribute("itemList", getItemList());
 
 		DetailForm form = new DetailForm();
 		model.addAttribute(form);
@@ -57,7 +69,9 @@ public class ShoppingController {
 	@RequestMapping(value = "/detail", method = { GET, POST })
 	public String toDetail(DetailForm detailForm, HttpServletRequest request, Model model) {
 
-		request.setAttribute("dispItem", getItemFromId(detailForm.getItemId()));
+		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
+		request.setAttribute("dispItem", dba.findOne(detailForm.getItemId()));
+		//request.setAttribute("dispItem", getItemFromId(detailForm.getItemId()));
 
 		PurchaseForm purchaseForm = new PurchaseForm();
 		model.addAttribute(purchaseForm);
@@ -72,7 +86,9 @@ public class ShoppingController {
 			return "detail";
 		}
 
-		request.setAttribute("dispItem", getItemFromId(form.getItemId()));
+		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
+		request.setAttribute("dispItem", dba.findOne(form.getItemId()));
+		//request.setAttribute("dispItem", getItemFromId(form.getItemId()));
 
 		return "confirm";
 	}

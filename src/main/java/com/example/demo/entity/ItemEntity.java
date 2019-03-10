@@ -1,18 +1,11 @@
-package com.example.demo;
+package com.example.demo.entity;
 
-import java.io.Serializable;
-
-public class ItemEntity implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ItemEntity {
 	
-	int id;
-	String name;
-	String imageUrl;
-	int price;
+	private int id;
+	private String name;
+	private String imageUrl;
+	private int price;
 
 	public ItemEntity(int id, String name, String imageUrl, int price) {
 		this.id = id;
