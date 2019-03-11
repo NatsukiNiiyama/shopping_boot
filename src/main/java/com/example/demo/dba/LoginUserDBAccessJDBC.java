@@ -16,6 +16,7 @@ import com.example.demo.entity.LoginUserEntity;
 
 @Repository
 public class LoginUserDBAccessJDBC {
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 

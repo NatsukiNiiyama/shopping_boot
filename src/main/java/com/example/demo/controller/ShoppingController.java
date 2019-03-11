@@ -3,12 +3,12 @@ package com.example.demo.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,12 +25,15 @@ import com.example.demo.form.PurchaseForm;
 @Controller
 public class ShoppingController {
 
+	@Autowired
+	LoginUserDBAccessJDBC loginUserDba;
+
+	@Autowired
+	ItemDBAccessJDBC itemDba;
+
 	@RequestMapping(value = { "/", "/login" }, method = { GET, POST })
 	public String login(Model model) {
 
-		LoginUserDBAccessJDBC dba = new LoginUserDBAccessJDBC();
-		List<LoginUserEntity> list = dba.findAll();
-		
 		LoginForm form = new LoginForm();
 		model.addAttribute(form);
 
@@ -38,13 +41,14 @@ public class ShoppingController {
 	}
 
 	@RequestMapping(value = "/menu", method = { GET, POST })
-	public String toMenu(@Valid LoginForm form, BindingResult result) {
+	public String toMenu(@Valid LoginForm form, BindingResult result, HttpServletRequest request) {
 
-		LoginUserDBAccessJDBC dba = new LoginUserDBAccessJDBC();
-		if (result.hasErrors() || dba.findOne(form.getUserId()) == null) {
+		LoginUserEntity entity = loginUserDba.findOne(form.getUserId());
+		if (result.hasErrors() || entity == null || !entity.getPassword().equals(form.getPassword())) {
 			return "login";
 		}
 
+		request.setAttribute("loginUser", entity);
 		return "menu";
 	}
 
@@ -56,9 +60,8 @@ public class ShoppingController {
 	@RequestMapping(value = "/list", method = { GET, POST })
 	public String toList(HttpServletRequest request, Model model) {
 
-		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
-		request.setAttribute("itemList", dba.findAll());
-		//request.setAttribute("itemList", getItemList());
+		List<ItemEntity> list = itemDba.findAll();
+		request.setAttribute("itemList", list);
 
 		DetailForm form = new DetailForm();
 		model.addAttribute(form);
@@ -69,9 +72,7 @@ public class ShoppingController {
 	@RequestMapping(value = "/detail", method = { GET, POST })
 	public String toDetail(DetailForm detailForm, HttpServletRequest request, Model model) {
 
-		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
-		request.setAttribute("dispItem", dba.findOne(detailForm.getItemId()));
-		//request.setAttribute("dispItem", getItemFromId(detailForm.getItemId()));
+		request.setAttribute("dispItem", itemDba.findOne(detailForm.getItemId()));
 
 		PurchaseForm purchaseForm = new PurchaseForm();
 		model.addAttribute(purchaseForm);
@@ -86,28 +87,8 @@ public class ShoppingController {
 			return "detail";
 		}
 
-		ItemDBAccessJDBC dba = new ItemDBAccessJDBC();
-		request.setAttribute("dispItem", dba.findOne(form.getItemId()));
-		//request.setAttribute("dispItem", getItemFromId(form.getItemId()));
+		request.setAttribute("dispItem", itemDba.findOne(form.getItemId()));
 
 		return "confirm";
-	}
-
-	private List<ItemEntity> getItemList() {
-		List<ItemEntity> list = new ArrayList<>();
-		list.add(new ItemEntity(1, "参考書", "images/book_law_roppouzensyo.png", 1000));
-		list.add(new ItemEntity(2, "CD", "images/entertainment_music.png", 2000));
-		list.add(new ItemEntity(3, "Tシャツ", "images/fashion_sutajan.png", 3000));
-		return list;
-	}
-
-	private ItemEntity getItemFromId(int id) {
-
-		for (ItemEntity item : getItemList()) {
-			if (item.getId() == id) {
-				return item;
-			}
-		}
-		return null;
 	}
 }

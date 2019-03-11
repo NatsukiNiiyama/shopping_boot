@@ -16,6 +16,7 @@ import com.example.demo.entity.ItemEntity;
 
 @Repository
 public class ItemDBAccessJDBC {
+	
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
