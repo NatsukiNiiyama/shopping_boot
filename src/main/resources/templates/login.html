@@ -20,6 +20,7 @@
 			<input type="password" th:field="*{password}" />
 			<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 		</div>
+		<br>
 		<div>
 			<input type="submit" th:value="送信" />
 		</div>

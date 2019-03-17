@@ -1,20 +1,15 @@
 package com.example.demo.form;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 
-public class PurchaseForm implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class PurchaseForm {
 
 	int itemId;
 
+	@NotEmpty
 	@Max(value = 999)
-	int count;
+	String count;
 
 	public int getItemId() {
 		return itemId;
@@ -24,11 +19,11 @@ public class PurchaseForm implements Serializable {
 		this.itemId = itemId;
 	}
 
-	public int getCount() {
+	public String getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(String count) {
 		this.count = count;
 	}
 

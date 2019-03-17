@@ -1,13 +1,6 @@
 package com.example.demo.form;
 
-import java.io.Serializable;
-
-public class DetailForm implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class DetailForm {
 	
 	int itemId;
 

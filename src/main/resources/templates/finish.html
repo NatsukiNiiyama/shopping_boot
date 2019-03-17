@@ -3,37 +3,14 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>購入確認</title>
+<title>購入完了</title>
 </head>
 <body>
-	<h2>購入確認画面</h2>
+	<h2>購入完了画面</h2>
 
-	<form th:object="${purchaseForm}" th:action="@{finish}" method="post">
-		<input type="hidden" name="itemId" th:value="${dispItem.id}" />
-		<input type="hidden" name="userId" th:value="${loginId}" />
-		<table>
-			<tr>
-				<th colspan="2"><img th:src="${dispItem.imageUrl}"
-					th:title="${dispItem.name}" height=300 /></th>
-			</tr>
-			<tr>
-				<td><span th:text="${dispItem.name}">name</span></td>
-				<td><span th:text="${dispItem.price}">price</span>円</td>
-			</tr>
-			<tr>
-				<td>
-					<span th:text="|${count}個|"></span>
-					<input type="hidden" name="count" th:value="${count}" />
-				</td>
-				<td>
-					合計：<span th:text="${dispItem.price*count}"></span>円
-				</td>
-			<tr>
-				<td colspan="2"><input type="submit" th:value="購入" /></td>
-			</tr>
-		</table>
-	</form>
-
+	<div>
+		<span th:text="お買い上げありがとうございました。"></span>
+	</div>
 	<br>
 	<div>
 		<form th:object="${userIdForm}" name="userIdForm1" th:action="@{backmenu}" method="post">

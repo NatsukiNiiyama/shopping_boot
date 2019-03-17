@@ -9,16 +9,20 @@
 	<h2>メニュー画面</h2>
 
 	<div>
-		ようこそ、
-		<span th:text="*{loginUser.userName}"></span>
-		さん
+		<span th:text="|ようこそ、${loginName}さん|"></span>
 	</div>
 	<br>
 	<div>
-		<a th:href="@{list}">商品一覧</a>
+		<form th:object="${userIdForm}" name="userIdForm1" th:action="@{list}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:userIdForm1.submit()">商品一覧</a>
+		</form>
 	</div>
 	<div>
-		<a th:href="@{login}">購入履歴</a>
+		<form th:object="${userIdForm}" name="userIdForm2" th:action="@{backmenu}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:userIdForm2.submit()">購入履歴</a>
+		</form>
 	</div>
 	<br>
 	<div>

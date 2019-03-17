@@ -9,8 +9,9 @@
 	<h2>商品一覧画面</h2>
 
 	<th:block th:each="item : ${itemList}">
-		<form th:object="${detailFom}" th:action="@{detail}" method="post">
+		<form th:object="${detailForm}" th:action="@{detail}" method="post">
 			<input type="hidden" name="itemId" th:value="${item.id}" />
+			<input type="hidden" name="userId" th:value="${loginId}" />
 			<table>
 				<tr>
 					<th rowspan="2"><img th:src="${item.imageUrl}"
@@ -27,10 +28,16 @@
 
 	<br>
 	<div>
-		<a th:href="@{backmenu}">メニュー</a>
+		<form th:object="${userIdForm}" name="userIdForm1" th:action="@{backmenu}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:userIdForm1.submit()">メニュー</a>
+		</form>
 	</div>
 	<div>
-		<a th:href="@{menu}">購入履歴</a>
+		<form th:object="${userIdForm}" name="userIdForm2" th:action="@{backmenu}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:userIdForm2.submit()">購入履歴</a>
+		</form>
 	</div>
 	<br>
 	<div>
