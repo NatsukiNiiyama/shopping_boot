@@ -8,7 +8,7 @@
 <body>
 	<h2>商品詳細画面</h2>
 
-	<form th:object="${purchaseForm}" th:action="@{confirm}" method="post">
+	<form th:object="${shoppingForm}" th:action="@{confirm}" method="post">
 		<input type="hidden" name="itemId" th:value="${dispItem.id}" />
 		<input type="hidden" name="userId" th:value="${loginId}" />
 		<table>
@@ -29,21 +29,21 @@
 
 	<br>
 	<div>
-		<form th:object="${userIdForm}" name="userIdForm1" th:action="@{backmenu}" method="post">
+		<form th:object="${shoppingForm}" name="form1" th:action="@{backmenu}" method="post">
 			<input type="hidden" name="userId" th:value="${loginId}" />
-			<a href="javascript:userIdForm1.submit()">メニュー</a>
+			<a href="javascript:form1.submit()">メニュー</a>
 		</form>
 	</div>
 	<div>
-		<form th:object="${userIdForm}" name="userIdForm2" th:action="@{list}" method="post">
+		<form th:object="${shoppingForm}" name="form2" th:action="@{list}" method="post">
 			<input type="hidden" name="userId" th:value="${loginId}" />
-			<a href="javascript:userIdForm2.submit()">商品一覧</a>
+			<a href="javascript:form2.submit()">商品一覧</a>
 		</form>
 	</div>
 	<div>
-		<form th:object="${userIdForm}" name="userIdForm3" th:action="@{backmenu}" method="post">
+		<form th:object="${shoppingForm}" name="form3" th:action="@{history}" method="post">
 			<input type="hidden" name="userId" th:value="${loginId}" />
-			<a href="javascript:userIdForm3.submit()">購入履歴</a>
+			<a href="javascript:form3.submit()">購入履歴</a>
 		</form>
 	</div>
 	<br>

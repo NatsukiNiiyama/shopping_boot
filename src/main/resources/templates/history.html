@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>購入履歴</title>
+</head>
+<body>
+	<h2>購入履歴画面</h2>
+
+	<th:block th:each="history : ${userHistoryList}">
+		<form th:object="${shoppingForm}" th:action="@{detail}" method="post">
+			<input type="hidden" name="itemId" th:value="${history.itemId}" />
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<table>
+				<tr>
+					<th rowspan="5"><img th:src="${itemMap[history.itemId].imageUrl}"
+						th:title="${itemMap[history.itemId].name}" height=100 /></th>
+					<td><span th:text="${itemMap[history.itemId].name}">name</span></td>
+				</tr>
+				<tr>
+					<td><span th:text="${itemMap[history.itemId].price}">price</span>円</td>
+				</tr>
+				<tr>
+					<td><span th:text="${history.count}">count</span>個</td>
+				</tr>
+				<tr>
+					<td>
+						合計：<span th:text="${itemMap[history.itemId].price*history.count}"></span>円
+					</td>
+				</tr>
+				<tr>
+					<td><input type="submit" th:value="商品詳細" /></td>
+				</tr>
+			</table>
+		</form>
+	</th:block>
+
+	<br>
+	<div>
+		<form th:object="${shoppingForm}" name="form1" th:action="@{backmenu}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:form1.submit()">メニュー</a>
+		</form>
+	</div>
+	<div>
+		<form th:object="${shoppingForm}" name="form2" th:action="@{list}" method="post">
+			<input type="hidden" name="userId" th:value="${loginId}" />
+			<a href="javascript:form2.submit()">商品一覧</a>
+		</form>
+	</div>
+	<br>
+	<div>
+		<a th:href="@{login}">ログアウト</a>
+	</div>
+</body>
+</html>

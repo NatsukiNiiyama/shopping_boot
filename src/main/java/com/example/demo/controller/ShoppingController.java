@@ -3,7 +3,9 @@ package com.example.demo.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -19,10 +21,8 @@ import com.example.demo.dba.LoginUserDBAccessJDBC;
 import com.example.demo.entity.BuyHistoryEntity;
 import com.example.demo.entity.ItemEntity;
 import com.example.demo.entity.LoginUserEntity;
-import com.example.demo.form.DetailForm;
 import com.example.demo.form.LoginForm;
-import com.example.demo.form.PurchaseForm;
-import com.example.demo.form.UserIdForm;
+import com.example.demo.form.ShoppingForm;
 
 @Controller
 public class ShoppingController {
@@ -32,7 +32,7 @@ public class ShoppingController {
 
 	@Autowired
 	ItemDBAccessJDBC itemDba;
-	
+
 	@Autowired
 	BuyHistoryDBAccessJDBC historyDba;
 
@@ -55,74 +55,76 @@ public class ShoppingController {
 
 		model.addAttribute("loginName", entity.getUserName());
 		model.addAttribute("loginId", entity.getUserId());
-		model.addAttribute(new UserIdForm());
 		return "menu";
 	}
 
 	@RequestMapping(value = "/backmenu", method = { GET, POST })
-	public String backMenu(UserIdForm form, Model model) {
+	public String backMenu(ShoppingForm form, Model model) {
 
 		LoginUserEntity entity = loginUserDba.findOne(form.getUserId());
 
 		model.addAttribute("loginName", entity.getUserName());
 		model.addAttribute("loginId", entity.getUserId());
-		model.addAttribute(new UserIdForm());
 		return "menu";
 	}
 
 	@RequestMapping(value = "/list", method = { GET, POST })
-	public String toList(UserIdForm userIdForm, Model model) {
+	public String toList(ShoppingForm form, Model model) {
 
 		List<ItemEntity> list = itemDba.findAll();
 		model.addAttribute("itemList", list);
 
-		model.addAttribute(new DetailForm());
-
-		model.addAttribute("loginId", userIdForm.getUserId());
-		model.addAttribute(new UserIdForm());
+		model.addAttribute("loginId", form.getUserId());
 
 		return "list";
 	}
 
 	@RequestMapping(value = "/detail", method = { GET, POST })
-	public String toDetail(UserIdForm userIdForm, DetailForm detailForm, Model model) {
+	public String toDetail(ShoppingForm form, Model model) {
 
-		model.addAttribute("dispItem", itemDba.findOne(detailForm.getItemId()));
-		model.addAttribute(new PurchaseForm());
+		model.addAttribute("dispItem", itemDba.findOne(form.getItemId()));
 
-		model.addAttribute("loginId", userIdForm.getUserId());
-		model.addAttribute(new UserIdForm());
+		model.addAttribute("loginId", form.getUserId());
 
 		return "detail";
 	}
 
 	@RequestMapping(value = "/confirm", method = { GET, POST })
-	public String toConFirm(UserIdForm userIdForm, @Valid PurchaseForm form, BindingResult result, Model model) {
+	public String toConFirm(@Valid ShoppingForm form, BindingResult result, Model model) {
 
 		model.addAttribute("dispItem", itemDba.findOne(form.getItemId()));
-		model.addAttribute(new PurchaseForm());
 
-		model.addAttribute("loginId", userIdForm.getUserId());
-		model.addAttribute(new UserIdForm());
-		
+		model.addAttribute("loginId", form.getUserId());
+
 		if (result.hasErrors() || !isNumber(form.getCount())) {
 			return "detail";
 		}
 		model.addAttribute("count", Integer.parseInt(form.getCount()));
-		
+
 		return "confirm";
 	}
 
 	@RequestMapping(value = "/finish", method = { GET, POST })
-	public String toFinish(UserIdForm userIdForm, PurchaseForm form, Model model) {
+	public String toFinish(ShoppingForm form, Model model) {
 
-		historyDba.save(new BuyHistoryEntity(null, userIdForm.getUserId(), form.getItemId(), Integer.parseInt(form.getCount())));
-		
-		model.addAttribute("loginId", userIdForm.getUserId());
-		
+		historyDba.save(
+				new BuyHistoryEntity(null, form.getUserId(), form.getItemId(), Integer.parseInt(form.getCount())));
+
+		model.addAttribute("loginId", form.getUserId());
+
 		return "finish";
 	}
-	
+
+	@RequestMapping(value = "/history", method = { GET, POST })
+	public String toHistory(ShoppingForm form, Model model) {
+
+		model.addAttribute("userHistoryList", historyDba.findByUserId(form.getUserId()));
+		model.addAttribute("itemMap", convertListToMap(itemDba.findAll()));
+		model.addAttribute("loginId", form.getUserId());
+
+		return "history";
+	}
+
 	private boolean isNumber(String num) {
 		try {
 			Integer.parseInt(num);
@@ -131,5 +133,13 @@ public class ShoppingController {
 			return false;
 		}
 		return true;
+	}
+
+	private Map<Integer, ItemEntity> convertListToMap(List<ItemEntity> itemList) {
+		Map<Integer, ItemEntity> itemMap = new HashMap<>();
+		for (ItemEntity item : itemList) {
+			itemMap.put(item.getId(), item);
+		}
+		return itemMap;
 	}
 }

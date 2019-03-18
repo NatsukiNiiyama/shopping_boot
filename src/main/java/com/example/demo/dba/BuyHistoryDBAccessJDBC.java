@@ -22,11 +22,11 @@ public class BuyHistoryDBAccessJDBC {
 
 	public List<BuyHistoryEntity> findAll() {
 
-		return jdbcTemplate.query("SELECT * FROM BUY_HISTORY ORDER BY userId",
+		return jdbcTemplate.query("SELECT * FROM BUY_HISTORY ORDER BY historyId",
 				new BeanPropertyRowMapper<BuyHistoryEntity>(BuyHistoryEntity.class));
 	}
 
-	public BuyHistoryEntity findOne(Integer historyId) {
+	public BuyHistoryEntity findOneByHistoryId(Integer historyId) {
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("historyId", historyId);
 
@@ -38,9 +38,17 @@ public class BuyHistoryDBAccessJDBC {
 		}
 	}
 
+	public List<BuyHistoryEntity> findByUserId(String userId) {
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+
+		return jdbcTemplate.query("SELECT * FROM BUY_HISTORY WHERE userId = :userId ORDER BY historyId", param,
+				new BeanPropertyRowMapper<BuyHistoryEntity>(BuyHistoryEntity.class));
+	}
+
 	public BuyHistoryEntity save(BuyHistoryEntity entity) {
 
-		BuyHistoryEntity historyEntity = this.findOne(entity.getHistoryId());
+		BuyHistoryEntity historyEntity = this.findOneByHistoryId(entity.getHistoryId());
 		SqlParameterSource param = new BeanPropertySqlParameterSource(entity);
 
 		if (historyEntity == null) {
@@ -48,7 +56,8 @@ public class BuyHistoryDBAccessJDBC {
 					"INSERT INTO BUY_HISTORY (historyId,userId,itemId,count) VALUES (nextval('CUSTOMER_CODE_SEQ'),:userId,:itemId,:count)",
 					param);
 		} else {
-			jdbcTemplate.update("UPDATE BUY_HISTORY SET historyId = :historyId, userId = :userId, itemId = :itemId, count = :count",
+			jdbcTemplate.update(
+					"UPDATE BUY_HISTORY SET historyId = :historyId, userId = :userId, itemId = :itemId, count = :count",
 					param);
 		}
 
